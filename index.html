@@ -18,48 +18,43 @@
             min-height: 100vh;
         }
 
-        /* خلفية جمالية ثابتة */
+        /* الاسم في الخلفية بشكل جمالي */
         body::before {
-            content: "المهندس محمد عقلان";
+            content: "عقلان";
             position: fixed;
-            top: 20%;
-            font-size: 15vw;
-            color: rgba(255, 255, 255, 0.02);
+            top: 30%;
+            font-size: 25vw;
+            color: rgba(255, 255, 255, 0.015);
             white-space: nowrap;
             z-index: -1;
-            transform: rotate(-20deg);
+            transform: rotate(-15deg);
             pointer-events: none;
         }
 
         .container {
             width: 100%;
-            max-width: 500px; /* جعل العرض محدوداً ليكون طويلاً ومريحاً للعين */
+            max-width: 500px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
             padding: 20px 10px;
         }
 
-        header {
+        /* عنوان النظام في الأعلى */
+        .system-header {
             text-align: center;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        h1 { font-size: 1.5rem; margin: 0 0 10px 0; color: #fff; }
-        
-        .phone-link {
-            color: #00d4ff;
-            text-decoration: none;
-            font-size: 1.1rem;
-            display: block;
+        .system-header h2 {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.6);
+            margin: 0;
         }
 
-        /* تنسيق الأقسام بشكل طولي */
         .room-section {
             background: rgba(255, 255, 255, 0.07);
             padding: 25px 20px;
@@ -67,6 +62,7 @@
             border: 1px solid rgba(255,255,255,0.1);
             text-align: center;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
         }
 
         .room-title {
@@ -83,11 +79,11 @@
         }
 
         button {
-            padding: 20px;
+            padding: 22px;
             font-size: 1.2rem;
             font-weight: bold;
             border: none;
-            border-radius: 18px;
+            border-radius: 20px;
             cursor: pointer;
             transition: all 0.2s ease;
             color: white;
@@ -105,38 +101,62 @@
 
         button:active { transform: scale(0.92); filter: brightness(1.2); }
 
-        .footer-deco {
-            text-align: center;
+        /* التذييل الجديد (الاسم والرقم في الأسفل) */
+        footer {
             margin-top: auto;
-            padding: 20px;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.3);
-            letter-spacing: 1px;
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* تحسينات إضافية للجوال */
+        footer h1 {
+            font-size: 1.4rem;
+            margin: 0 0 10px 0;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(0,212,255,0.3);
+        }
+
+        .phone-link {
+            color: #00d4ff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: inline-block;
+            padding: 5px 15px;
+            border: 1px dashed rgba(0,212,255,0.3);
+            border-radius: 10px;
+        }
+
+        .footer-deco-text {
+            display: block;
+            margin-top: 15px;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.2);
+            letter-spacing: 3px;
+        }
+
         @media (max-width: 480px) {
-            h1 { font-size: 1.3rem; }
             button { padding: 18px; font-size: 1.1rem; }
-            .room-section { padding: 20px 15px; }
+            footer h1 { font-size: 1.2rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <header>
-            <h1>✧ المهندس محمد عقلان ✧</h1>
-            <a href="tel:777830743" class="phone-link">☏ 777830743</a>
-        </header>
+        <div class="system-header">
+            <h2>⚡ SMART CONTROL SYSTEM ⚡</h2>
+        </div>
 
         <div class="room-section" style="border-right: 5px solid #3498db;">
-            <div class="room-title" style="color: #3498db;">البوابة العامة</div>
+            <span class="room-title" style="color: #3498db;">البوابة العامة</span>
             <button id="gateBtn" onclick="toggleGate()">فتح البوابة</button>
         </div>
 
         <div class="room-section" style="border-right: 5px solid #2ecc71;">
-            <div class="room-title">الغرفة (1)</div>
+            <span class="room-title">الغرفة (1)</span>
             <div class="btn-group">
                 <button class="btn-on" onclick="send('1N')">تشغيل</button>
                 <button class="btn-off" onclick="send('1F')">إطفاء</button>
@@ -144,16 +164,18 @@
         </div>
 
         <div class="room-section" style="border-right: 5px solid #f1c40f;">
-            <div class="room-title">الغرفة (2)</div>
+            <span class="room-title">الغرفة (2)</span>
             <div class="btn-group">
                 <button class="btn-on" onclick="send('2N')">تشغيل</button>
                 <button class="btn-off" onclick="send('2F')">إطفاء</button>
             </div>
         </div>
 
-        <div class="footer-deco">
-            ━━━━━ ⚡ SMART CONTROL ⚡ ━━━━━
-        </div>
+        <footer>
+            <h1>✧ المهندس محمد عقلان ✧</h1>
+            <a href="tel:777830743" class="phone-link">☏ 777830743</a>
+            <span class="footer-deco-text">━━━━━ DESIGNED BY AQLAN ━━━━━</span>
+        </footer>
     </div>
 
     <script>
