@@ -2,89 +2,79 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <style>
+        * { box-sizing: border-box; }
+
         body {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             display: flex;
             justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        /* الاسم في الخلفية */
+        /* خلفية جمالية ثابتة */
         body::before {
             content: "المهندس محمد عقلان";
             position: fixed;
-            font-size: 8vw;
+            top: 20%;
+            font-size: 15vw;
             color: rgba(255, 255, 255, 0.02);
             white-space: nowrap;
             z-index: -1;
-            transform: rotate(-15deg);
+            transform: rotate(-20deg);
             pointer-events: none;
         }
 
         .container {
-            width: 95%;
-            max-width: 1200px; /* الحجم الأقصى لعرض الصفحة */
-            background: rgba(255, 255, 255, 0.03);
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
+            width: 100%;
+            max-width: 500px; /* جعل العرض محدوداً ليكون طويلاً ومريحاً للعين */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px 10px;
         }
 
         header {
-            margin-bottom: 40px;
+            text-align: center;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        h1 { font-size: 2.5rem; margin-bottom: 10px; color: #fff; text-shadow: 0 0 10px rgba(0,212,255,0.5); }
+        h1 { font-size: 1.5rem; margin: 0 0 10px 0; color: #fff; }
         
         .phone-link {
             color: #00d4ff;
             text-decoration: none;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
-        .phone-link:hover { text-shadow: 0 0 10px #00d4ff; }
-
-        /* توزيع الأزرار بشكل شبكة */
-        .controls-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
+            font-size: 1.1rem;
+            display: block;
         }
 
+        /* تنسيق الأقسام بشكل طولي */
         .room-section {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        .room-section:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.07);
+            padding: 25px 20px;
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
         .room-title {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             margin-bottom: 20px;
             color: #f1c40f;
             font-weight: bold;
+            display: block;
         }
 
         .btn-group {
@@ -93,42 +83,42 @@
         }
 
         button {
-            padding: 18px;
-            font-size: 1.1rem;
+            padding: 20px;
+            font-size: 1.2rem;
             font-weight: bold;
             border: none;
-            border-radius: 15px;
+            border-radius: 18px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.2s ease;
             color: white;
             flex: 1;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        /* ألوان الأزرار */
         #gateBtn {
-            background: linear-gradient(45deg, #3498db, #2980b9);
             width: 100%;
+            background: linear-gradient(45deg, #3498db, #2980b9);
         }
 
         .btn-on { background: linear-gradient(45deg, #2ecc71, #27ae60); }
         .btn-off { background: linear-gradient(45deg, #e74c3c, #c0392b); }
 
-        button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
-        button:active { transform: scale(0.95); }
+        button:active { transform: scale(0.92); filter: brightness(1.2); }
 
         .footer-deco {
-            margin-top: 50px;
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.4);
-            letter-spacing: 2px;
+            text-align: center;
+            margin-top: auto;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 1px;
         }
 
-        /* للهواتف الصغيرة */
-        @media (max-width: 600px) {
-            .container { padding: 20px; }
-            h1 { font-size: 1.8rem; }
-            .controls-grid { grid-template-columns: 1fr; }
+        /* تحسينات إضافية للجوال */
+        @media (max-width: 480px) {
+            h1 { font-size: 1.3rem; }
+            button { padding: 18px; font-size: 1.1rem; }
+            .room-section { padding: 20px 15px; }
         }
     </style>
 </head>
@@ -140,42 +130,35 @@
             <a href="tel:777830743" class="phone-link">☏ 777830743</a>
         </header>
 
-        <div class="controls-grid">
-            <div class="room-section" style="border-top: 4px solid #3498db;">
-                <div class="room-title" style="color: #3498db;">البوابة العامة</div>
-                <button id="gateBtn" onclick="toggleGate()">فتح البوابة</button>
-            </div>
+        <div class="room-section" style="border-right: 5px solid #3498db;">
+            <div class="room-title" style="color: #3498db;">البوابة العامة</div>
+            <button id="gateBtn" onclick="toggleGate()">فتح البوابة</button>
+        </div>
 
-            <div class="room-section" style="border-top: 4px solid #2ecc71;">
-                <div class="room-title">الغرفة (1)</div>
-                <div class="btn-group">
-                    <button class="btn-on" onclick="send('1N')">تشغيل</button>
-                    <button class="btn-off" onclick="send('1F')">إطفاء</button>
-                </div>
+        <div class="room-section" style="border-right: 5px solid #2ecc71;">
+            <div class="room-title">الغرفة (1)</div>
+            <div class="btn-group">
+                <button class="btn-on" onclick="send('1N')">تشغيل</button>
+                <button class="btn-off" onclick="send('1F')">إطفاء</button>
             </div>
+        </div>
 
-            <div class="room-section" style="border-top: 4px solid #f1c40f;">
-                <div class="room-title">الغرفة (2)</div>
-                <div class="btn-group">
-                    <button class="btn-on" onclick="send('2N')">تشغيل</button>
-                    <button class="btn-off" onclick="send('2F')">إطفاء</button>
-                </div>
+        <div class="room-section" style="border-right: 5px solid #f1c40f;">
+            <div class="room-title">الغرفة (2)</div>
+            <div class="btn-group">
+                <button class="btn-on" onclick="send('2N')">تشغيل</button>
+                <button class="btn-off" onclick="send('2F')">إطفاء</button>
             </div>
         </div>
 
         <div class="footer-deco">
-            ━━━━━ ⚡ SMART CONTROL SYSTEM ⚡ ━━━━━
+            ━━━━━ ⚡ SMART CONTROL ⚡ ━━━━━
         </div>
     </div>
 
     <script>
-        // إعداد الاتصال
         const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
         let isGateOpen = false;
-
-        client.on('connect', () => {
-            console.log('Connected to MQTT Broker');
-        });
 
         function toggleGate() {
             const btn = document.getElementById('gateBtn');
@@ -194,7 +177,7 @@
 
         function send(msg) { 
             client.publish('1drone/commands', msg); 
-            console.log("Sent Payload: " + msg);
+            console.log("Sent: " + msg);
         }
     </script>
 </body>
