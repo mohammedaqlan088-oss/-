@@ -12,62 +12,48 @@
             color: white;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 10px;
+            padding: 5px; /* تقليل الحواف الخارجية */
             display: flex;
             justify-content: center;
+            align-items: center; /* توسيط المحتوى عمودياً */
             min-height: 100vh;
-        }
-
-        /* الاسم في الخلفية بشكل جمالي */
-        body::before {
-            content: "عقلان";
-            position: fixed;
-            top: 30%;
-            font-size: 25vw;
-            color: rgba(255, 255, 255, 0.015);
-            white-space: nowrap;
-            z-index: -1;
-            transform: rotate(-15deg);
-            pointer-events: none;
+            overflow: hidden; /* منع التمرير إذا كان المحتوى مناسباً */
         }
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 400px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            padding: 20px 10px;
+            gap: 10px; /* تقليل المسافة بين البلوكات */
+            padding: 10px;
         }
 
-        /* عنوان النظام في الأعلى */
         .system-header {
             text-align: center;
-            padding: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 10px;
+            padding: 5px;
+            margin-bottom: 5px;
         }
 
         .system-header h2 {
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            color: rgba(255,255,255,0.6);
+            font-size: 1rem;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.5);
             margin: 0;
         }
 
         .room-section {
             background: rgba(255, 255, 255, 0.07);
-            padding: 25px 20px;
-            border-radius: 25px;
+            padding: 15px; /* تقليل الحشو الداخلي للبلوك */
+            border-radius: 20px;
             border: 1px solid rgba(255,255,255,0.1);
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             backdrop-filter: blur(10px);
         }
 
         .room-title {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
+            font-size: 1.1rem;
+            margin-bottom: 12px; /* تقليل المسافة تحت العنوان */
             color: #f1c40f;
             font-weight: bold;
             display: block;
@@ -75,20 +61,19 @@
 
         .btn-group {
             display: flex;
-            gap: 15px;
+            gap: 10px;
         }
 
         button {
-            padding: 22px;
-            font-size: 1.2rem;
+            padding: 15px; /* تقليل حجم الأزرار قليلاً */
+            font-size: 1.1rem;
             font-weight: bold;
             border: none;
-            border-radius: 20px;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.2s ease;
             color: white;
             flex: 1;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         #gateBtn {
@@ -99,47 +84,43 @@
         .btn-on { background: linear-gradient(45deg, #2ecc71, #27ae60); }
         .btn-off { background: linear-gradient(45deg, #e74c3c, #c0392b); }
 
-        button:active { transform: scale(0.92); filter: brightness(1.2); }
+        button:active { transform: scale(0.95); }
 
-        /* التذييل الجديد (الاسم والرقم في الأسفل) */
         footer {
-            margin-top: auto;
+            margin-top: 5px;
             text-align: center;
-            padding: 30px 20px;
+            padding: 15px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 25px;
+            border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         footer h1 {
-            font-size: 1.4rem;
-            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            margin: 0 0 5px 0;
             color: #fff;
-            text-shadow: 0 0 15px rgba(0,212,255,0.3);
         }
 
         .phone-link {
             color: #00d4ff;
             text-decoration: none;
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: bold;
-            display: inline-block;
-            padding: 5px 15px;
-            border: 1px dashed rgba(0,212,255,0.3);
-            border-radius: 10px;
         }
 
         .footer-deco-text {
             display: block;
-            margin-top: 15px;
-            font-size: 0.7rem;
+            margin-top: 8px;
+            font-size: 0.6rem;
             color: rgba(255,255,255,0.2);
-            letter-spacing: 3px;
         }
 
-        @media (max-width: 480px) {
-            button { padding: 18px; font-size: 1.1rem; }
-            footer h1 { font-size: 1.2rem; }
+        /* تحسين إضافي للشاشات الصغيرة جداً */
+        @media (max-height: 700px) {
+            .container { gap: 8px; }
+            .room-section { padding: 10px; }
+            button { padding: 12px; }
+            .room-title { margin-bottom: 8px; }
         }
     </style>
 </head>
