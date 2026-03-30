@@ -1,27 +1,157 @@
-<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
 
-<style>
-    /* إضافة تأثير الضغط لجميع الأزرار */
-    button:active {
-        transform: scale(0.92); /* تصغير الحجم بنسبة بسيطة عند النقر */
-        opacity: 0.8;           /* تقليل الشفافية قليلاً */
-    }
-    
-    button {
-        transition: transform 0.1s; /* تنعيم حركة الضغطة */
-        cursor: pointer;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-    }
-</style>
+        body::before {
+            content: "المهندس محمد عقلان";
+            position: fixed;
+            font-size: 10vw;
+            color: rgba(255, 255, 255, 0.03);
+            white-space: nowrap;
+            z-index: -1;
+            transform: rotate(-20deg);
+        }
 
-<body style="text-align:center; padding:50px">
-    <button onclick="send('ON')" style="background:green; color:white; padding:20px">تشغيل</button>
-    <button onclick="send('OFF')" style="background:red; color:white; padding:20px">إطفاء</button>
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .room-section {
+            background: rgba(255, 255, 255, 0.03);
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .room-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #f1c40f;
+            font-weight: bold;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 15px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: white;
+            flex: 1;
+        }
+
+        #gateBtn {
+            width: 100%;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-on { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+        .btn-off { background: linear-gradient(45deg, #e74c3c, #c0392b); }
+
+        button:hover { transform: translateY(-3px); opacity: 0.9; }
+        button:active { transform: scale(0.95); }
+
+        .footer-deco {
+            margin-top: 20px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 style="font-size: 22px;">✧ المهندس محمد عقلان ✧</h1>
+        <a href="tel:777830743" style="color: #00d4ff; text-decoration: none; display: block; margin-bottom: 20px;">☏ 777830743</a>
+        
+        <div class="room-section" style="border: 1px solid #3498db;">
+            <div class="room-title" style="color: #3498db;">البوابة العامة</div>
+            <button id="gateBtn" onclick="toggleGate()">فتح البوابة</button>
+        </div>
+
+        <div class="room-section">
+            <div class="room-title">الغرفة (1)</div>
+            <div class="btn-group">
+                <button class="btn-on" onclick="send('1N')">تشغيل</button>
+                <button class="btn-off" onclick="send('1F')">إطفاء</button>
+            </div>
+        </div>
+
+        <div class="room-section">
+            <div class="room-title">الغرفة (2)</div>
+            <div class="btn-group">
+                <button class="btn-on" onclick="send('2N')">تشغيل</button>
+                <button class="btn-off" onclick="send('2F')">إطفاء</button>
+            </div>
+        </div>
+
+        <div class="footer-deco">
+            ━━━━━ ⚡ Smart Control System ⚡ ━━━━━
+        </div>
+    </div>
 
     <script>
         const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
-        function send(msg) { client.publish('1drone/commands', msg); }
+        let isGateOpen = false;
+
+        client.on('connect', () => {
+            console.log('Connected to MQTT');
+        });
+
+        // وظيفة البوابة العامة
+        function toggleGate() {
+            const btn = document.getElementById('gateBtn');
+            if (!isGateOpen) {
+                send('ON'); 
+                btn.innerHTML = "إغلاق البوابة";
+                btn.style.background = "linear-gradient(45deg, #e67e22, #d35400)";
+                isGateOpen = true;
+            } else {
+                send('OFF'); 
+                btn.innerHTML = "فتح البوابة";
+                btn.style.background = "linear-gradient(45deg, #3498db, #2980b9)";
+                isGateOpen = false;
+            }
+        }
+
+        // وظيفة الإرسال العامة
+        function send(msg) { 
+            client.publish('1drone/commands', msg); 
+            console.log("Sent: " + msg);
+        }
     </script>
-</body> 
+</body>
+</html>
